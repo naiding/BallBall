@@ -1,0 +1,101 @@
+
+NET "CLK_I"   LOC = "E3" | IOSTANDARD=LVCMOS33;
+NET "CLK_I" TNM_NET = CLK_I_pin;
+TIMESPEC TS_CLK_I_pin = PERIOD CLK_I_pin 100000 kHz;
+
+NET "CPU_RESET_I"   LOC = "C12" | IOSTANDARD=LVCMOS33;
+ 
+NET "d_shared_mem_bus_0_PSRAM_Mem_CLK_O_pin"   LOC = "T15" | IOSTANDARD=LVCMOS33;
+
+#NET "d_shared_mem_bus_0_PSRAM_Mem_ADV_O_pin"   LOC = "T13" | IOSTANDARD=LVCMOS33;
+
+NET "d_shared_mem_bus_0_PSRAM_Mem_CEN_O_pin"   LOC = "L18" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_PSRAM_Mem_CRE_O_pin"   LOC = "J14" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_OEN_O_pin"   LOC = "H14" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_WEN_O_pin"   LOC = "R11" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_PSRAM_Mem_LB_O_pin"   LOC = "J15" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_PSRAM_Mem_UB_O_pin"   LOC = "J13" | IOSTANDARD=LVCMOS33;
+
+#NET "d_shared_mem_bus_0_Mem_DQ_pin<0>"   LOC = "A13" | IOSTANDARD=LVCMOS33; # yes, XADC1, just to make the implementor happy
+
+NET "d_shared_mem_bus_0_Mem_DQ_pin<0>"   LOC = "R12" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_DQ_pin<1>"   LOC = "T11" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_DQ_pin<2>"   LOC = "U12" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_DQ_pin<3>"   LOC = "R13" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_DQ_pin<4>"   LOC = "U18" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_DQ_pin<5>"   LOC = "R17" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_DQ_pin<6>"   LOC = "T18" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_DQ_pin<7>"   LOC = "R18" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_DQ_pin<8>"   LOC = "F18" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_DQ_pin<9>"   LOC = "G18" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_DQ_pin<10>"   LOC = "G17" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_DQ_pin<11>"   LOC = "M18" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_DQ_pin<12>"   LOC = "M17" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_DQ_pin<13>"   LOC = "P18" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_DQ_pin<14>"   LOC = "N17" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_DQ_pin<15>"   LOC = "P17" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_Addr_O_pin<0>"   LOC = "J18" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_Addr_O_pin<1>"   LOC = "H17" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_Addr_O_pin<2>"   LOC = "H15" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_Addr_O_pin<3>"   LOC = "J17" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_Addr_O_pin<4>"   LOC = "H16" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_Addr_O_pin<5>"   LOC = "K15" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_Addr_O_pin<6>"   LOC = "K13" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_Addr_O_pin<7>"   LOC = "N15" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_Addr_O_pin<8>"   LOC = "V16" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_Addr_O_pin<9>"   LOC = "U14" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_Addr_O_pin<10>"   LOC = "V14" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_Addr_O_pin<11>"   LOC = "V12" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_Addr_O_pin<12>"   LOC = "P14" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_Addr_O_pin<13>"   LOC = "U16" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_Addr_O_pin<14>"   LOC = "R15" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_Addr_O_pin<15>"   LOC = "N14" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_Addr_O_pin<16>"   LOC = "N16" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_Addr_O_pin<17>"   LOC = "M13" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_Addr_O_pin<18>"   LOC = "V17" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_Addr_O_pin<19>"   LOC = "U17" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_Addr_O_pin<20>"   LOC = "T10" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_Addr_O_pin<21>"   LOC = "M16" | IOSTANDARD=LVCMOS33;
+NET "d_shared_mem_bus_0_Mem_Addr_O_pin<22>"   LOC = "U13" | IOSTANDARD=LVCMOS33;
+
+#NET "d_shared_mem_bus_0_PSRAM_Mem_Wait_I_pin"   LOC = "T14" | IOSTANDARD=LVCMOS33;
+
+NET "xps_tft_0_TFT_HSYNC_pin"   LOC = "B11" | IOSTANDARD=LVCMOS33;
+NET "xps_tft_0_TFT_VSYNC_pin"   LOC = "B12" | IOSTANDARD=LVCMOS33;
+
+#NET "xps_tft_0_TFT_VGA_R_pin<0>"   LOC = "P2" | IOSTANDARD=LVCMOS33;
+#NET "xps_tft_0_TFT_VGA_R_pin<1>"   LOC = "R2" | IOSTANDARD=LVCMOS33;
+NET "xps_tft_0_TFT_VGA_R_pin<0>"   LOC = "A3" | IOSTANDARD=LVCMOS33;
+NET "xps_tft_0_TFT_VGA_R_pin<1>"   LOC = "B4" | IOSTANDARD=LVCMOS33;
+NET "xps_tft_0_TFT_VGA_R_pin<2>"   LOC = "C5" | IOSTANDARD=LVCMOS33;
+NET "xps_tft_0_TFT_VGA_R_pin<3>"   LOC = "A4" | IOSTANDARD=LVCMOS33;
+
+#NET "xps_tft_0_TFT_VGA_G_pin<0>"   LOC = "U1" | IOSTANDARD=LVCMOS33;
+#NET "xps_tft_0_TFT_VGA_G_pin<1>"   LOC = "P5" | IOSTANDARD=LVCMOS33;
+NET "xps_tft_0_TFT_VGA_G_pin<0>"   LOC = "C6" | IOSTANDARD=LVCMOS33;
+NET "xps_tft_0_TFT_VGA_G_pin<1>"   LOC = "A5" | IOSTANDARD=LVCMOS33;
+NET "xps_tft_0_TFT_VGA_G_pin<2>"   LOC = "B6" | IOSTANDARD=LVCMOS33;
+NET "xps_tft_0_TFT_VGA_G_pin<3>"   LOC = "A6" | IOSTANDARD=LVCMOS33;
+
+#NET "xps_tft_0_TFT_VGA_B_pin<0>"   LOC = "R1" | IOSTANDARD=LVCMOS33;
+#NET "xps_tft_0_TFT_VGA_B_pin<1>"   LOC = "V1" | IOSTANDARD=LVCMOS33;
+NET "xps_tft_0_TFT_VGA_B_pin<0>"   LOC = "B7" | IOSTANDARD=LVCMOS33;
+NET "xps_tft_0_TFT_VGA_B_pin<1>"   LOC = "C7" | IOSTANDARD=LVCMOS33;
+NET "xps_tft_0_TFT_VGA_B_pin<2>"   LOC = "D7" | IOSTANDARD=LVCMOS33;
+NET "xps_tft_0_TFT_VGA_B_pin<3>"   LOC = "D8" | IOSTANDARD=LVCMOS33;
+
+NET "axi_uartlite_0_RX_pin"   LOC = "C4" | IOSTANDARD=LVCMOS33;
+NET "axi_uartlite_0_TX_pin"   LOC = "D4" | IOSTANDARD=LVCMOS33;
+
+
+NET "Dip_GPIO_IO_I_pin<0>"			LOC = "U9"	| IOSTANDARD = "LVCMOS33";							
+NET "Dip_GPIO_IO_I_pin<1>"			LOC = "U8"	| IOSTANDARD = "LVCMOS33";		
+NET "Dip_GPIO_IO_I_pin<2>"			LOC = "R7"	| IOSTANDARD = "LVCMOS33";		
+NET "Dip_GPIO_IO_I_pin<3>"			LOC = "R6"	| IOSTANDARD = "LVCMOS33";		
+
+NET "xps_ps2_0_PS2_1_CLK"			LOC = "F4"	| PULLUP | IOSTANDARD = "LVCMOS33";		#Bank = 35, Pin name = IO_L13P_T2_MRCC_35,					Sch name = PS2_CLK
+NET "xps_ps2_0_PS2_1_DATA"			LOC = "B2"	| PULLUP | IOSTANDARD = "LVCMOS33";		
+
+
+NET "pwm_out" LOC = "A11" |IOSTANDARD = "LVCMOS33";
+NET "pwm_sd" LOC = "D12" |IOSTANDARD = "LVCMOS33";	

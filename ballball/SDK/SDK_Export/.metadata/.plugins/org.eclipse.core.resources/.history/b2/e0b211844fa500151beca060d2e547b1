@@ -1,0 +1,762 @@
+#include "xps2.h"
+#include "xtft.h"
+#include "xparameters.h"
+#include "ball.h"
+#include "boom.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+#include "xstatus.h"
+
+#define TOTAL_TEST_BYTES	18 	/* Total Number of bytes to be transmitted/received */
+#define KEYBOARD_ACK		0xFA	/* ACK from keyboard */
+#define printf xil_printf	   	/* A smaller footprint printf */
+#define PS2_DEVICE_ID		XPAR_PS2_0_DEVICE_ID
+#define TFT_DEVICE_ID	XPAR_TFT_0_DEVICE_ID
+#define TFT_FRAME_ADDR0		XPAR_XPS_MCH_EMC_0_MEM0_HIGHADDR - 0x001FFFFF
+#define FGCOLOR_grn		0x1c	/**< Foreground Color - Green */
+#define FGCOLOR_blu		0x3
+#define FGCOLOR_red		0xe0
+#define FGCOLOR_blk     0x00
+#define SIZE            10
+static XTft TftInstance;
+XTft_Config *TftConfigPtr;
+int leftTopX = 40;
+int leftTopY = 60;
+int rightTopX = 580;
+int rightTopY = 60;
+int leftBottomX = 40;
+int leftBottomY = 420;
+int rightBottomX = 580;
+int rightBottomY = 421;
+int stop = 1;
+char snakecolor;
+char colorset[4] = { 0x1c,0x33,0xe0,0xcc};
+u8 TxBuffer[TOTAL_TEST_BYTES] = {0xED, 0x00, 0xED, 0x01,
+					0xED, 0x02, 0xED, 0x04,
+					0xED, 0x07, 0xED, 0x06,
+					0xED, 0x01, 0xED, 0x00,
+					0xED, 0x07};
+u8 RxBuffer;
+
+static XPs2 Ps2Inst; 		/* Ps2 driver instance */
+
+Boom boomboom;
+Ball ball_red;
+Ball ball_blue;
+
+int mode = 1;
+
+void Delay(int MODE);
+void paintNode(int x, int y, char color);
+void paintBall(int x, int y, char color);
+void paintBoom(int x, int y, char color);
+void paintFrame();
+void InitializeBall();
+void moveBall(int ball, int direction);
+void moveBoom();
+
+void displayRedWin();
+void displayBlueWin();
+
+int main()
+{
+	srand(time(0));
+	int Status;
+	u32 StatusReg;
+	XPs2_Config *ConfigPtr;
+	ConfigPtr = XPs2_LookupConfig(PS2_DEVICE_ID);
+	if (ConfigPtr == NULL) {
+			return XST_FAILURE;
+	}
+	XPs2_CfgInitialize(&Ps2Inst, ConfigPtr, ConfigPtr->BaseAddress);
+	Status = XPs2_SelfTest(&Ps2Inst);
+	if (Status != XST_SUCCESS) {
+		return XST_FAILURE;
+	}
+
+	TftConfigPtr = XTft_LookupConfig(TFT_DEVICE_ID);
+	XTft_CfgInitialize(&TftInstance, TftConfigPtr,
+				 	TftConfigPtr->BaseAddress);
+	XTft_SetFrameBaseAddr(&TftInstance, TFT_FRAME_ADDR0);
+	XTft_ClearScreen(&TftInstance);
+
+	InitializeBall();
+	paintFrame();
+
+	while (1) {
+		do {
+			if(stop == 0)
+			{
+				moveBoom();
+				Delay(mode);
+			}
+
+			StatusReg = XPs2_GetStatus(&Ps2Inst);
+		}while((StatusReg & XPS2_STATUS_RX_FULL) == 0);
+		XPs2_Recv(&Ps2Inst, &RxBuffer, 1);
+		printf("%x \r\n",RxBuffer);
+
+		if(stop == 0){
+			if((RxBuffer == 0x1C)||(RxBuffer == 0x23)||
+					(RxBuffer == 0x6B)||(RxBuffer == 0xE0)||
+					(RxBuffer == 0x69) || (RxBuffer == 0x72) || (RxBuffer == 0x7A))
+			{
+				if(RxBuffer == 0x1C)
+				{
+					moveBall(1, 1);
+				}
+				if(RxBuffer == 0x23)
+				{
+					moveBall(1, 2);
+				}
+				if(RxBuffer == 0x6B)
+				{
+					moveBall(2, 1);
+				}
+				if(RxBuffer == 0xE0)
+				{
+					moveBall(2, 2);
+				}
+				if(RxBuffer == 0x69)
+				{
+					mode = 1;
+				}
+				if(RxBuffer == 0x72)
+				{
+					mode = 2;
+				}
+				if(RxBuffer == 0x7A)
+				{
+					mode = 3;
+				}
+			}
+		}
+		if(RxBuffer == 0x44){
+			stop = 0;
+			XTft_SetPos(&TftInstance, 0,8);
+			XTft_Write(&TftInstance, 'G');
+			XTft_SetPos(&TftInstance, 15,8);
+			XTft_Write(&TftInstance, 'O');
+			XTft_SetPos(&TftInstance, 30,8);
+			XTft_Write(&TftInstance, ' ');
+			XTft_SetPos(&TftInstance, 45,8);
+			XTft_Write(&TftInstance, ' ');
+			XTft_SetPos(&TftInstance, 60,8);
+			XTft_Write(&TftInstance, ' ');
+
+		}
+		if(RxBuffer == 0x4D){
+			stop = 1;
+			XTft_SetPos(&TftInstance, 0,8);
+			XTft_Write(&TftInstance, 'P');
+			XTft_SetPos(&TftInstance, 15,8);
+			XTft_Write(&TftInstance, 'A');
+			XTft_SetPos(&TftInstance, 30,8);
+			XTft_Write(&TftInstance, 'U');
+			XTft_SetPos(&TftInstance, 45,8);
+			XTft_Write(&TftInstance, 'S');
+			XTft_SetPos(&TftInstance, 60,8);
+			XTft_Write(&TftInstance, 'E');
+		}
+	}
+
+	return 0;
+}
+
+void InitializeBall()
+{
+	stop = 1;
+	ball_red.x = (int)(leftBottomX + rightBottomX)/2;
+	ball_red.y = leftBottomY - 10;
+	ball_red.color = FGCOLOR_red;
+
+	ball_blue.x = (int)(leftTopX + rightTopX)/2;
+	ball_blue.y = leftTopY + 10;
+	ball_blue.color = FGCOLOR_blu;
+
+	boomboom.x = ball_red.x;
+	boomboom.y = ball_red.y - 10;
+	boomboom.color = 0x11;
+	boomboom.direction = 1;
+
+	paintBoom(boomboom.x, boomboom.y, boomboom.color);
+	paintBall(ball_red.x, ball_red.y, ball_red.color);
+	paintBall(ball_blue.x, ball_blue.y, ball_blue.color);
+
+	XTft_SetPos(&TftInstance, 0,8);
+	XTft_Write(&TftInstance, 'R');
+	XTft_SetPos(&TftInstance, 15,8);
+	XTft_Write(&TftInstance, 'E');
+	XTft_SetPos(&TftInstance, 30,8);
+	XTft_Write(&TftInstance, 'A');
+	XTft_SetPos(&TftInstance, 45,8);
+	XTft_Write(&TftInstance, 'D');
+	XTft_SetPos(&TftInstance, 60,8);
+	XTft_Write(&TftInstance, 'Y');
+}
+
+void paintBoom(int x, int y, char color)
+{
+	int i,j;
+	for (i = x - 5;i < x + 5;i ++)
+	for (j = y - 5;j < y + 5; j++)
+		XTft_SetPixel(&TftInstance, i, j, color);
+}
+
+void paintBall(int x, int y, char color)
+{
+	int i,j;
+	for (i = x - 25;i < x + 25;i ++)
+	for (j = y - 5;j < y + 5; j++)
+		XTft_SetPixel(&TftInstance, i, j, color);
+}
+
+void moveBall(int ball, int direction)
+{
+	int speed = 20;
+	printf("\r\ndirection:%d",direction);
+	if(direction != 0)
+	{
+		if(ball == 1)
+		{
+//			if((ball_red.x - leftBottomX <= 30)){
+//				return;
+//			}
+//			if((leftBottomX - ball_red.x <= 30)){
+//				return;
+//			}
+
+			paintBall(ball_red.x, ball_red.y, FGCOLOR_blk);
+			if(direction == 1)	ball_red.x = ball_red.x - speed;
+			if(direction == 2)	ball_red.x = ball_red.x + speed;
+			paintBall(ball_red.x, ball_red.y, ball_red.color);
+		}
+
+		if(ball == 2)
+		{
+//			if((ball_blue.x - leftBottomX <= 30)){
+//				return;
+//			}
+//			if((leftBottomX - ball_blue.x <= 30)){
+//				return;
+//			}
+			if(ball_blue.x == leftTopX || ball_blue.x == rightTopX) return;
+			paintBall(ball_blue.x, ball_blue.y, FGCOLOR_blk);
+			if(direction == 1)	ball_blue.x = ball_blue.x - speed;
+			if(direction == 2)	ball_blue.x = ball_blue.x + speed;
+			paintBall(ball_blue.x, ball_blue.y, ball_blue.color);
+		}
+	}
+	return;
+}
+
+void moveBoom()
+{
+	paintBall(boomboom.x, boomboom.y, FGCOLOR_blk);
+
+	//left
+	if(boomboom.x <= leftTopX + 30) {
+		if(boomboom.direction == 3) boomboom.direction = 4;
+		if(boomboom.direction == 2) boomboom.direction = 1;
+	}
+	//right
+	if(boomboom.x >= rightTopX - 30) {
+		if(boomboom.direction == 1) boomboom.direction = 2;
+		if(boomboom.direction == 4) boomboom.direction = 3;
+	}
+	//top
+	if(boomboom.y <= leftTopY + 20) {
+		if(boomboom.x >= ball_blue.x - 28 && boomboom.x <= ball_blue.x + 28)
+		{
+			if(boomboom.direction == 2) boomboom.direction = 3;
+			if(boomboom.direction == 1) boomboom.direction = 4;
+		}
+		else
+		{
+
+			displayRedWin();
+			XTft_ClearScreen(&TftInstance);
+			InitializeBall();
+			paintFrame();
+
+		}
+	}
+	//bottom
+	if(boomboom.y >= rightBottomY - 20) {
+		if(boomboom.x >= ball_red.x - 28 && boomboom.x <= ball_red.x + 28)
+		{
+			if(boomboom.direction == 4) boomboom.direction = 1;
+			if(boomboom.direction == 3) boomboom.direction = 2;
+		}
+		else
+		{
+			displayBlueWin();
+
+			XTft_ClearScreen(&TftInstance);
+			InitializeBall();
+			paintFrame();
+
+		}
+	}
+
+	int speed = 1;
+
+	switch(boomboom.direction)
+	{
+		case 1:
+			boomboom.x = boomboom.x + speed;
+			boomboom.y = boomboom.y - speed;
+			paintBoom(boomboom.x, boomboom.y, boomboom.color);
+			break;
+
+		case 2:
+			boomboom.x = boomboom.x - speed;
+			boomboom.y = boomboom.y - speed;
+			paintBoom(boomboom.x, boomboom.y, boomboom.color);
+			break;
+
+
+		case 3:
+			boomboom.x = boomboom.x - speed;
+			boomboom.y = boomboom.y + speed;
+			paintBoom(boomboom.x, boomboom.y, boomboom.color);
+			break;
+
+
+		case 4:
+			boomboom.x = boomboom.x + speed;
+			boomboom.y = boomboom.y + speed;
+			paintBoom(boomboom.x, boomboom.y, boomboom.color);
+			break;
+
+		default:
+			printf("no");
+	}
+}
+
+
+void writeVGA(int num)
+{
+	if(num == 0)	XTft_Write(&TftInstance,'0');
+	if(num == 1)	XTft_Write(&TftInstance,'1');
+	if(num == 2)	XTft_Write(&TftInstance,'2');
+	if(num == 3)	XTft_Write(&TftInstance,'3');
+	if(num == 4)	XTft_Write(&TftInstance,'4');
+	if(num == 5)	XTft_Write(&TftInstance,'5');
+	if(num == 6)	XTft_Write(&TftInstance,'6');
+	if(num == 7)	XTft_Write(&TftInstance,'7');
+	if(num == 8)	XTft_Write(&TftInstance,'8');
+	if(num == 9)	XTft_Write(&TftInstance,'9');
+
+	return 0;
+}
+
+
+int abs(int num){
+	if(num < 0)
+		return -num;
+	return num;
+}
+
+void paintNode(int x, int y, char color){
+	int i,j;
+	for (i = x - 5;i < x + 5; i++)
+	for (j = y - 5;j < y + 5; j++)
+		XTft_SetPixel(&TftInstance, i, j, color);
+}
+
+void Delay(int MODE)
+{
+	int i;
+	for(i = 0;i < 50000 * MODE; i++);
+}
+
+void paintFrame() {
+	int i;
+
+	for(i = leftTopX;i < rightTopX;i+=10){
+		paintNode(i,leftTopY, FGCOLOR_grn);
+	}
+	for(i = leftBottomX;i < rightBottomX;i+=10){
+		paintNode(i,rightBottomY ,FGCOLOR_grn);
+	}
+	for(i = leftTopY;i < leftBottomY;i+=10){
+		paintNode(leftTopX,i,FGCOLOR_grn);
+	}
+	for(i = rightTopY;i < rightBottomY;i+=10){
+		paintNode(rightBottomX,i,FGCOLOR_grn);
+	}
+}
+
+void displayRedWin()
+{
+	int i;
+	for( i = 0; i < 3; i++)
+	{
+		//light
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 75,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, 'G');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 60,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, 'A');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 45,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, 'M');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 30,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, 'E');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 15,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, 'O');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 + 15,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, 'V');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 + 30,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, 'E');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 + 45,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, 'R');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 + 60,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 + 75,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, '!');
+
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 75,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 60,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, 'R');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 45,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, 'E');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 30,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, 'D');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 15,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 + 15,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, 'W');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 + 30,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, 'I');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 + 45,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, 'N');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 + 60,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, '!');
+
+		Delay(50);
+
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 75,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 60,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 45,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 30,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 15,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 + 15,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 + 30,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 + 45,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 + 60,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 + 75,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, ' ');
+
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 75,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 60,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 45,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 30,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 15,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 + 15,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 + 30,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 + 45,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 + 60,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, ' ');
+
+		Delay(50);
+
+	}
+}
+
+void displayBlueWin()
+{
+	int i;
+	for(i = 0; i < 3; i++)
+	{
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 75,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, 'G');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 60,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, 'A');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 45,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, 'M');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 30,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, 'E');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 15,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, 'O');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 + 15,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, 'V');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 + 30,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, 'E');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 + 45,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, 'R');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 + 60,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 + 75,
+				(int)(leftTopY + leftBottomY)/2 - 20);
+		XTft_Write(&TftInstance, '!');
+
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 75,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 60,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, 'B');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 45,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, 'L');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 30,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, 'U');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 - 15,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, 'E');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, ' ');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 + 15,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, 'W');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 + 30,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, 'I');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 + 45,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, 'N');
+		XTft_SetPos(&TftInstance,
+				(int)(leftTopX + rightTopX)/2 + 60,
+				(int)(leftTopY + leftBottomY)/2 + 20);
+		XTft_Write(&TftInstance, '!');
+
+		Delay(50);
+
+		XTft_SetPos(&TftInstance,
+						(int)(leftTopX + rightTopX)/2 - 75,
+						(int)(leftTopY + leftBottomY)/2 - 20);
+				XTft_Write(&TftInstance, ' ');
+				XTft_SetPos(&TftInstance,
+						(int)(leftTopX + rightTopX)/2 - 60,
+						(int)(leftTopY + leftBottomY)/2 - 20);
+				XTft_Write(&TftInstance, ' ');
+				XTft_SetPos(&TftInstance,
+						(int)(leftTopX + rightTopX)/2 - 45,
+						(int)(leftTopY + leftBottomY)/2 - 20);
+				XTft_Write(&TftInstance, ' ');
+				XTft_SetPos(&TftInstance,
+						(int)(leftTopX + rightTopX)/2 - 30,
+						(int)(leftTopY + leftBottomY)/2 - 20);
+				XTft_Write(&TftInstance, ' ');
+				XTft_SetPos(&TftInstance,
+						(int)(leftTopX + rightTopX)/2 - 15,
+						(int)(leftTopY + leftBottomY)/2 - 20);
+				XTft_Write(&TftInstance, ' ');
+				XTft_SetPos(&TftInstance,
+						(int)(leftTopX + rightTopX)/2,
+						(int)(leftTopY + leftBottomY)/2 - 20);
+				XTft_Write(&TftInstance, ' ');
+				XTft_SetPos(&TftInstance,
+						(int)(leftTopX + rightTopX)/2 + 15,
+						(int)(leftTopY + leftBottomY)/2 - 20);
+				XTft_Write(&TftInstance, ' ');
+				XTft_SetPos(&TftInstance,
+						(int)(leftTopX + rightTopX)/2 + 30,
+						(int)(leftTopY + leftBottomY)/2 - 20);
+				XTft_Write(&TftInstance, ' ');
+				XTft_SetPos(&TftInstance,
+						(int)(leftTopX + rightTopX)/2 + 45,
+						(int)(leftTopY + leftBottomY)/2 - 20);
+				XTft_Write(&TftInstance, ' ');
+				XTft_SetPos(&TftInstance,
+						(int)(leftTopX + rightTopX)/2 + 60,
+						(int)(leftTopY + leftBottomY)/2 - 20);
+				XTft_Write(&TftInstance, ' ');
+				XTft_SetPos(&TftInstance,
+						(int)(leftTopX + rightTopX)/2 + 75,
+						(int)(leftTopY + leftBottomY)/2 - 20);
+				XTft_Write(&TftInstance, ' ');
+
+				XTft_SetPos(&TftInstance,
+						(int)(leftTopX + rightTopX)/2 - 75,
+						(int)(leftTopY + leftBottomY)/2 + 20);
+				XTft_Write(&TftInstance, ' ');
+				XTft_SetPos(&TftInstance,
+						(int)(leftTopX + rightTopX)/2 - 60,
+						(int)(leftTopY + leftBottomY)/2 + 20);
+				XTft_Write(&TftInstance, ' ');
+				XTft_SetPos(&TftInstance,
+						(int)(leftTopX + rightTopX)/2 - 45,
+						(int)(leftTopY + leftBottomY)/2 + 20);
+				XTft_Write(&TftInstance, ' ');
+				XTft_SetPos(&TftInstance,
+						(int)(leftTopX + rightTopX)/2 - 30,
+						(int)(leftTopY + leftBottomY)/2 + 20);
+				XTft_Write(&TftInstance, ' ');
+				XTft_SetPos(&TftInstance,
+						(int)(leftTopX + rightTopX)/2 - 15,
+						(int)(leftTopY + leftBottomY)/2 + 20);
+				XTft_Write(&TftInstance, ' ');
+				XTft_SetPos(&TftInstance,
+						(int)(leftTopX + rightTopX)/2,
+						(int)(leftTopY + leftBottomY)/2 + 20);
+				XTft_Write(&TftInstance, ' ');
+				XTft_SetPos(&TftInstance,
+						(int)(leftTopX + rightTopX)/2 + 15,
+						(int)(leftTopY + leftBottomY)/2 + 20);
+				XTft_Write(&TftInstance, ' ');
+				XTft_SetPos(&TftInstance,
+						(int)(leftTopX + rightTopX)/2 + 30,
+						(int)(leftTopY + leftBottomY)/2 + 20);
+				XTft_Write(&TftInstance, ' ');
+				XTft_SetPos(&TftInstance,
+						(int)(leftTopX + rightTopX)/2 + 45,
+						(int)(leftTopY + leftBottomY)/2 + 20);
+				XTft_Write(&TftInstance, ' ');
+				XTft_SetPos(&TftInstance,
+						(int)(leftTopX + rightTopX)/2 + 60,
+						(int)(leftTopY + leftBottomY)/2 + 20);
+				XTft_Write(&TftInstance, ' ');
+
+				Delay(50);
+
+	}
+
+}
+
+

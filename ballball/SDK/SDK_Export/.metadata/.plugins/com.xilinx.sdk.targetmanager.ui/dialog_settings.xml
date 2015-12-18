@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item value="system_bd.bmm" key="N4_TFT_Ok_hw_platform-bmmFile"/>
+	<item value="system_bd.bmm" key="piano_hw_platform-bmmFile"/>
+	<item value="C:\Users\LEON\Desktop\ballball\SDK\SDK_Export\snake\Debug\snake.elf" key="SNAKE_hw_platform-microblaze_0-initElf"/>
+	<item value="bootloop" key="N4_TFT_Ok_hw_platform-microblaze_0-initElf"/>
+	<item value="system.bit" key="N4_TFT_Ok_hw_platform-bitFile"/>
+	<item value="system_bd.bmm" key="SNAKE_hw_platform-bmmFile"/>
+	<item value="system.bit" key="SNAKE_hw_platform-bitFile"/>
+	<item value="C:\Users\sti\Desktop\GreedSnake_VGA\piano\SDK\SDK_Export\snake\Debug\snake.elf" key="piano_hw_platform-microblaze_0-initElf"/>
+	<item value="system.bit" key="piano_hw_platform-bitFile"/>
+</section>

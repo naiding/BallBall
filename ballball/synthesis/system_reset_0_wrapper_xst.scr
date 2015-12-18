@@ -1,0 +1,14 @@
+set -tmpdir E:\application_program2\xilinx_works\microcomputer_MIPS_Nexys4\piano\piano\synthesis\xst_temp_dir\
+run
+-opt_mode speed
+-netlist_hierarchy as_optimized
+-opt_level 1
+-p xc7a100tcsg324-1
+-top system_reset_0_wrapper
+-ifmt MIXED
+-ifn system_reset_0_wrapper_xst.prj
+-ofn ../implementation/system_reset_0_wrapper.ngc
+-hierarchy_separator /
+-iobuf NO
+-sd {../implementation}
+-vlgincdir {"E:\application_program2\xilinx_works\microcomputer_MIPS_Nexys4\piano\piano\pcores\" "E:\application_program\ISE_14_7\14.7\ISE_DS\EDK\hw\XilinxBFMinterface\pcores\" "E:\application_program\ISE_14_7\14.7\ISE_DS\EDK\hw\XilinxProcessorIPLib\pcores\" }

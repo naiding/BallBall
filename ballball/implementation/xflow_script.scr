@@ -1,0 +1,25 @@
+#!/bin/csh -f
+###########################################
+# Script file to run the flow 
+# 
+###########################################
+#
+# Command line for ngdbuild
+#
+ngdbuild -p xc7a100tcsg324-1 -nt timestamp -bm system.bmm "/home/hawk/disk/move_128/Nexys4_demo/source/implementation/system.ngc" -uc system.ucf system.ngd 
+
+#
+# Command line for map
+#
+map -o system_map.ncd -w -pr b -ol high -timing -detail system.ngd system.pcf 
+
+#
+# Command line for par
+#
+par -w -ol high system_map.ncd system.ncd system.pcf 
+
+#
+# Command line for post_par_trce
+#
+trce -e 3 -xml system.twx system.ncd system.pcf 
+

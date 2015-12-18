@@ -1,0 +1,6 @@
+19:09:04 **** Auto Build of project Linedraw_bsp ****
+make -k all 
+'Finished building libraries'
+
+19:09:05 Build Finished (took 162ms)
+

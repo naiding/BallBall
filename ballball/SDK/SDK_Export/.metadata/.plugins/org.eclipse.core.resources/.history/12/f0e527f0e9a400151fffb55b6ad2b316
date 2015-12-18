@@ -1,0 +1,66 @@
+/*
+ * snake.c
+ *
+ *  Created on: 2015-1-6
+ *      Author: xc
+ */
+#include <stdlib.h>
+#include <stdio.h>
+#include "ball.h"
+
+
+void Insert(int x, int y,Snake P) {
+	Snake TempCell;
+	TempCell = malloc(sizeof(struct Node));
+
+	if (TempCell == NULL)
+		xil_printf("Out of space");
+
+	TempCell->x = x;
+	TempCell->y = y;
+	TempCell->Next = P->Next;
+	P->Next->Pre = TempCell;
+	TempCell->Pre = P;
+	P->Next = TempCell;
+
+}
+
+void move(int direction, Snake L){
+	Snake Head = L->Next;
+
+	while(Head->Next != NULL) {
+
+		Head = Head->Next;
+
+	}
+
+	while(Head->Pre != NULL) {
+
+		Head->x = Head->Pre->x;
+		Head->y = Head->Pre->y;
+		Head = Head->Pre;
+
+	}
+
+	Head = L->Next;
+	switch(direction) {
+	case 0://right
+		Head->x += 10;
+		break;
+	case 1://left
+		Head->x -= 10;
+		break;
+	case 2://down
+		Head->y += 10;
+		break;
+	case 3://up
+		Head->y -= 10;
+		break;
+	}
+
+
+
+
+
+
+}

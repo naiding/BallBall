@@ -1,0 +1,158 @@
+
+bitinit version Xilinx EDK 14.4 Build EDK_P.49d
+Copyright (c) Xilinx Inc. 2002.
+
+Parsing MHS File system.mhs...
+WARNING:EDK:4092 - IPNAME: proc_sys_reset, INSTANCE: reset_0 - Pre-Production
+   version not verified on hardware for architecture 'artix7' -
+   /home/hawk/disk/move_128/Nexys4_demo/source/system.mhs line 25 
+WARNING:EDK:4092 - IPNAME: lmb_v10, INSTANCE: microblaze_0_ilmb - Pre-Production
+   version not verified on hardware for architecture 'artix7' -
+   /home/hawk/disk/move_128/Nexys4_demo/source/system.mhs line 40 
+WARNING:EDK:4092 - IPNAME: lmb_bram_if_cntlr, INSTANCE:
+   microblaze_0_i_bram_cntlr - Pre-Production version not verified on hardware
+   for architecture 'artix7' -
+   /home/hawk/disk/move_128/Nexys4_demo/source/system.mhs line 47 
+WARNING:EDK:4092 - IPNAME: lmb_v10, INSTANCE: microblaze_0_dlmb - Pre-Production
+   version not verified on hardware for architecture 'artix7' -
+   /home/hawk/disk/move_128/Nexys4_demo/source/system.mhs line 56 
+WARNING:EDK:4092 - IPNAME: mdm, INSTANCE: microblaze_0_debug_module -
+   Pre-Production version not verified on hardware for architecture 'artix7' -
+   /home/hawk/disk/move_128/Nexys4_demo/source/system.mhs line 63 
+WARNING:EDK:4092 - IPNAME: lmb_bram_if_cntlr, INSTANCE:
+   microblaze_0_d_bram_cntlr - Pre-Production version not verified on hardware
+   for architecture 'artix7' -
+   /home/hawk/disk/move_128/Nexys4_demo/source/system.mhs line 75 
+WARNING:EDK:4092 - IPNAME: bram_block, INSTANCE: microblaze_0_bram_block -
+   Pre-Production version not verified on hardware for architecture 'artix7' -
+   /home/hawk/disk/move_128/Nexys4_demo/source/system.mhs line 84 
+WARNING:EDK:4092 - IPNAME: microblaze, INSTANCE: microblaze_0 - Pre-Production
+   version not verified on hardware for architecture 'artix7' -
+   /home/hawk/disk/move_128/Nexys4_demo/source/system.mhs line 99 
+WARNING:EDK:4092 - IPNAME: clock_generator, INSTANCE: clock_generator_0 -
+   Pre-Production version not verified on hardware for architecture 'artix7' -
+   /home/hawk/disk/move_128/Nexys4_demo/source/system.mhs line 125 
+WARNING:EDK:4092 - IPNAME: axi_uartlite, INSTANCE: axi_uartlite_0 -
+   Pre-Production version not verified on hardware for architecture 'artix7' -
+   /home/hawk/disk/move_128/Nexys4_demo/source/system.mhs line 139 
+WARNING:EDK:4092 - IPNAME: axi_timer, INSTANCE: axi_timer_0 - Pre-Production
+   version not verified on hardware for architecture 'artix7' -
+   /home/hawk/disk/move_128/Nexys4_demo/source/system.mhs line 153 
+WARNING:EDK:4092 - IPNAME: axi_intc, INSTANCE: axi_intc_0 - Pre-Production
+   version not verified on hardware for architecture 'artix7' -
+   /home/hawk/disk/move_128/Nexys4_demo/source/system.mhs line 163 
+WARNING:EDK:4092 - IPNAME: plb_v46, INSTANCE: plb_v46_0 - Pre-Production version
+   not verified on hardware for architecture 'artix7' -
+   /home/hawk/disk/move_128/Nexys4_demo/source/system.mhs line 174 
+WARNING:EDK:4092 - IPNAME: xps_tft, INSTANCE: xps_tft_0 - Pre-Production version
+   not verified on hardware for architecture 'artix7' -
+   /home/hawk/disk/move_128/Nexys4_demo/source/system.mhs line 182 
+WARNING:EDK:4092 - IPNAME: axi_plbv46_bridge, INSTANCE: axi_plbv46_bridge_0 -
+   Pre-Production version not verified on hardware for architecture 'artix7' -
+   /home/hawk/disk/move_128/Nexys4_demo/source/system.mhs line 200 
+WARNING:EDK:4092 - IPNAME: xps_mch_emc, INSTANCE: xps_mch_emc_0 - Pre-Production
+   version not verified on hardware for architecture 'artix7' -
+   /home/hawk/disk/move_128/Nexys4_demo/source/system.mhs line 210 
+
+Overriding IP level properties ...
+INFO:EDK:4130 - IPNAME: axi_interconnect, INSTANCE:microblaze_0_axi_periph - tcl
+   is overriding PARAMETER C_BASEFAMILY value to artix7 -
+   /opt/Xilinx/14.4/ISE_DS/EDK/hw/XilinxProcessorIPLib/pcores/axi_interconnect_v
+   1_06_a/data/axi_interconnect_v2_1_0.mpd line 81 
+INFO:EDK:4130 - IPNAME: microblaze, INSTANCE:microblaze_0 - tcl is overriding
+   PARAMETER C_ENDIANNESS value to 1 -
+   /opt/Xilinx/14.4/ISE_DS/EDK/hw/XilinxProcessorIPLib/pcores/microblaze_v8_40_b
+   /data/microblaze_v2_1_0.mpd line 196 
+INFO:EDK:4130 - IPNAME: microblaze, INSTANCE:microblaze_0 - tcl is overriding
+   PARAMETER C_ICACHE_USE_FSL value to 0 -
+   /opt/Xilinx/14.4/ISE_DS/EDK/hw/XilinxProcessorIPLib/pcores/microblaze_v8_40_b
+   /data/microblaze_v2_1_0.mpd line 337 
+INFO:EDK:4130 - IPNAME: microblaze, INSTANCE:microblaze_0 - tcl is overriding
+   PARAMETER C_DCACHE_USE_FSL value to 0 -
+   /opt/Xilinx/14.4/ISE_DS/EDK/hw/XilinxProcessorIPLib/pcores/microblaze_v8_40_b
+   /data/microblaze_v2_1_0.mpd line 367 
+INFO:EDK:4130 - IPNAME: axi_intc, INSTANCE:axi_intc_0 - tcl is overriding
+   PARAMETER C_NUM_INTR_INPUTS value to 1 -
+   /opt/Xilinx/14.4/ISE_DS/EDK/hw/XilinxProcessorIPLib/pcores/axi_intc_v1_03_a/d
+   ata/axi_intc_v2_1_0.mpd line 85 
+
+Computing clock values...
+INFO:EDK:1432 - Frequency for Top-Level Input Clock 'CLK_I' is not specified.
+   Clock DRCs will not be performed for IPs connected to that clock port, unless
+   they are connected through the clock generator IP. 
+
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   microblaze_0_i_bram_cntlr:BRAM_Clk_A. Clock DRCs will not be performed on
+   this core and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   microblaze_0_d_bram_cntlr:BRAM_Clk_A. Clock DRCs will not be performed on
+   this core and cores connected to it. 
+
+Performing IP level DRCs on properties...
+
+Running DRC Tcl procedures for OPTION IPLEVEL_DRC_PROC...
+Address Map for Processor microblaze_0
+  (0000000000-0x0003ffff) microblaze_0_d_bram_cntlr	microblaze_0_dlmb
+  (0000000000-0x0003ffff) microblaze_0_i_bram_cntlr	microblaze_0_ilmb
+  (0x40600000-0x4060ffff) axi_uartlite_0	microblaze_0_axi_periph
+  (0x41200000-0x4120ffff) axi_intc_0	microblaze_0_axi_periph
+  (0x41c00000-0x41c0ffff) axi_timer_0	microblaze_0_axi_periph
+  (0x44400000-0x4440ffff) microblaze_0_debug_module	microblaze_0_axi_periph
+  (0x86e00000-0x86e0ffff)
+xps_tft_0	microblaze_0_axi_periph->axi_plbv46_bridge_0->plb_v46_0
+  (0x87000000-0x87ffffff)
+xps_mch_emc_0	microblaze_0_axi_periph->axi_plbv46_bridge_0->plb_v46_0
+INFO:EDK:4130 - IPNAME: lmb_v10, INSTANCE:microblaze_0_ilmb - tool is overriding
+   PARAMETER C_LMB_NUM_SLAVES value to 1 -
+   /opt/Xilinx/14.4/ISE_DS/EDK/hw/XilinxProcessorIPLib/pcores/lmb_v10_v2_00_b/da
+   ta/lmb_v10_v2_1_0.mpd line 82 
+INFO:EDK:4130 - IPNAME: lmb_v10, INSTANCE:microblaze_0_dlmb - tool is overriding
+   PARAMETER C_LMB_NUM_SLAVES value to 1 -
+   /opt/Xilinx/14.4/ISE_DS/EDK/hw/XilinxProcessorIPLib/pcores/lmb_v10_v2_00_b/da
+   ta/lmb_v10_v2_1_0.mpd line 82 
+INFO:EDK:4130 - IPNAME: bram_block, INSTANCE:microblaze_0_bram_block - tool is
+   overriding PARAMETER C_MEMSIZE value to 0x40000 -
+   /opt/Xilinx/14.4/ISE_DS/EDK/hw/XilinxProcessorIPLib/pcores/bram_block_v1_00_a
+   /data/bram_block_v2_1_0.mpd line 78 
+INFO:EDK:4130 - IPNAME: plb_v46, INSTANCE:plb_v46_0 - tool is overriding
+   PARAMETER C_PLBV46_NUM_MASTERS value to 2 -
+   /opt/Xilinx/14.4/ISE_DS/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_05_a/da
+   ta/plb_v46_v2_1_0.mpd line 79 
+INFO:EDK:4130 - IPNAME: plb_v46, INSTANCE:plb_v46_0 - tool is overriding
+   PARAMETER C_PLBV46_NUM_SLAVES value to 2 -
+   /opt/Xilinx/14.4/ISE_DS/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_05_a/da
+   ta/plb_v46_v2_1_0.mpd line 80 
+INFO:EDK:4130 - IPNAME: plb_v46, INSTANCE:plb_v46_0 - tool is overriding
+   PARAMETER C_PLBV46_MID_WIDTH value to 1 -
+   /opt/Xilinx/14.4/ISE_DS/EDK/hw/XilinxProcessorIPLib/pcores/plb_v46_v1_05_a/da
+   ta/plb_v46_v2_1_0.mpd line 81 
+INFO:EDK:4130 - IPNAME: xps_tft, INSTANCE:xps_tft_0 - tool is overriding
+   PARAMETER C_SPLB_DWIDTH value to 64 -
+   /home/hawk/disk/move_128/Nexys4_demo/source/pcores/xps_tft_v2_01_a/data/xps_t
+   ft_v2_1_0.mpd line 89 
+INFO:EDK:4130 - IPNAME: xps_tft, INSTANCE:xps_tft_0 - tool is overriding
+   PARAMETER C_SPLB_NUM_MASTERS value to 2 -
+   /home/hawk/disk/move_128/Nexys4_demo/source/pcores/xps_tft_v2_01_a/data/xps_t
+   ft_v2_1_0.mpd line 92 
+INFO:EDK:4130 - IPNAME: axi_plbv46_bridge, INSTANCE:axi_plbv46_bridge_0 - tool
+   is overriding PARAMETER C_MPLB_DWIDTH value to 64 -
+   /opt/Xilinx/14.4/ISE_DS/EDK/hw/XilinxProcessorIPLib/pcores/axi_plbv46_bridge_
+   v2_02_a/data/axi_plbv46_bridge_v2_1_0.mpd line 96 
+INFO:EDK:4130 - IPNAME: xps_mch_emc, INSTANCE:xps_mch_emc_0 - tool is overriding
+   PARAMETER C_SPLB_NUM_MASTERS value to 2 -
+   /home/hawk/disk/move_128/Nexys4_demo/source/pcores/xps_mch_emc_v3_01_a/data/x
+   ps_mch_emc_v2_1_0.mpd line 88 
+INFO:EDK:4130 - IPNAME: xps_mch_emc, INSTANCE:xps_mch_emc_0 - tool is overriding
+   PARAMETER C_SPLB_DWIDTH value to 64 -
+   /home/hawk/disk/move_128/Nexys4_demo/source/pcores/xps_mch_emc_v3_01_a/data/x
+   ps_mch_emc_v2_1_0.mpd line 90 
+
+Checking platform address map ...
+
+Initializing Memory...
+Running Data2Mem with the following command:
+data2mem -bm implementation/system_bd -p xc7a100tcsg324-1 -bt
+implementation/system.bit  -bd SDK/test_tft/Debug/test_tft.elf tag microblaze_0 
+-o b implementation/download.bit 
+Memory Initialization completed successfully.
+
