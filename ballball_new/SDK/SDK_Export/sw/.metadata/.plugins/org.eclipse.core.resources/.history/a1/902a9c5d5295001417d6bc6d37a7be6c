@@ -1,0 +1,115 @@
+/*$Id: xtft_example.c,v 1.1.2.1 2009/11/25 08:14:26 svemula Exp $ */
+/******************************************************************************
+*
+* (c) Copyright 2008-2009 Xilinx, Inc. All rights reserved.
+*
+* This file contains confidential and proprietary information of Xilinx, Inc.
+* and is protected under U.S. and international copyright and other
+* intellectual property laws.
+*
+* DISCLAIMER
+* This disclaimer is not a license and does not grant any rights to the
+* materials distributed herewith. Except as otherwise provided in a valid
+* license issued to you by Xilinx, and to the maximum extent permitted by
+* applicable law: (1) THESE MATERIALS ARE MADE AVAILABLE "AS IS" AND WITH ALL
+* FAULTS, AND XILINX HEREBY DISCLAIMS ALL WARRANTIES AND CONDITIONS, EXPRESS,
+* IMPLIED, OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF
+* MERCHANTABILITY, NON-INFRINGEMENT, OR FITNESS FOR ANY PARTICULAR PURPOSE;
+* and (2) Xilinx shall not be liable (whether in contract or tort, including
+* negligence, or under any other theory of liability) for any loss or damage
+* of any kind or nature related to, arising under or in connection with these
+* materials, including for any direct, or any indirect, special, incidental,
+* or consequential loss or damage (including loss of data, profits, goodwill,
+* or any type of loss or damage suffered as a result of any action brought by
+* a third party) even if such damage or loss was reasonably foreseeable or
+* Xilinx had been advised of the possibility of the same.
+*
+* CRITICAL APPLICATIONS
+* Xilinx products are not designed or intended to be fail-safe, or for use in
+* any application requiring fail-safe performance, such as life-support or
+* safety devices or systems, Class III medical devices, nuclear facilities,
+* applications related to the deployment of airbags, or any other applications
+* that could lead to death, personal injury, or severe property or
+* environmental damage (individually and collectively, "Critical
+* Applications"). Customer assumes the sole risk and liability of any use of
+* Xilinx products in Critical Applications, subject only to applicable laws
+* and regulations governing limitations on product liability.
+*
+* THIS COPYRIGHT NOTICE AND DISCLAIMER MUST BE RETAINED AS PART OF THIS FILE
+* AT ALL TIMES.
+*
+******************************************************************************/
+/****************************************************************************/
+/**
+*
+* @file xtft_example.c
+*
+* This file contains a design example using the driver functions of the XTft
+* driver. This example shows the usage of the driver/device to
+* - Write a character and write a string of characters
+* - Draw a line
+* - Turn ON/OFF the TFT Device
+*
+*
+* @note
+*
+* TFT_FRAME_ADDR specifies the starting address of the 2MB space for storing the
+* frame data and has to be defined by the user based on the system memory map.
+*
+*
+* <pre>
+* MODIFICATION HISTORY:
+*
+* Ver    Who   Date      Changes
+* -----  ----  --------  -----------------------------------------------
+* 1.00a  sg    03/24/08  First release
+* 1.00a  sg    09/24/08  Updated the example to update the Video Memory Base
+*			 Address with the Memory specified by the application
+* 2.00a  ktn   07/09/09  Updated the example to poll the Vsync(Video address
+*			 latch) status bit before writing to the Address
+*			 Register (AR)
+* </pre>
+*
+*****************************************************************************/
+
+/***************************** Include Files ********************************/
+
+#include "xtft.h"
+#include "xparameters.h"
+#define TFT_DEVICE_ID	XPAR_TFT_0_DEVICE_ID
+#define TFT_FRAME_ADDR0		XPAR_XPS_MCH_EMC_0_MEM0_HIGHADDR - 0x001FFFFF
+#define FGCOLOR_VALUE2		0x1c	/**< Foreground Color - Green */
+#define FGCOLOR_VALUE3		0xe0
+#define FGCOLOR_VALUE1		0xc0
+#define FGCOLOR_VALUE4		0xa0
+#define FGCOLOR_VALUE5		0x80
+#define FGCOLOR_VALUE6		0x60
+#define BGCOLOR_VALUE		0x0		/**< Background Color - Black */
+static XTft TftInstance;
+XTft_Config *TftConfigPtr;
+int main()
+{
+	u8 VarChar;
+	TftConfigPtr = XTft_LookupConfig(TFT_DEVICE_ID);
+	XTft_CfgInitialize(&TftInstance, TftConfigPtr,
+				 	TftConfigPtr->BaseAddress);
+	XTft_SetFrameBaseAddr(&TftInstance, TFT_FRAME_ADDR0);
+	XTft_ClearScreen(&TftInstance);
+	XTft_SetPos(&TftInstance,5,5);
+	VarChar = 'A';
+	XTft_SetColor(&TftInstance, FGCOLOR_VALUE1, BGCOLOR_VALUE);
+	XTft_Write(&TftInstance, VarChar);
+	XTft_SetColor(&TftInstance, FGCOLOR_VALUE2, BGCOLOR_VALUE);
+	XTft_Write(&TftInstance, VarChar);
+	XTft_SetColor(&TftInstance, FGCOLOR_VALUE3, BGCOLOR_VALUE);
+	XTft_Write(&TftInstance, VarChar);
+	XTft_SetColor(&TftInstance, FGCOLOR_VALUE4, BGCOLOR_VALUE);
+	XTft_Write(&TftInstance, VarChar);
+	XTft_SetColor(&TftInstance, FGCOLOR_VALUE5, BGCOLOR_VALUE);
+	XTft_Write(&TftInstance, VarChar);
+	XTft_SetColor(&TftInstance, FGCOLOR_VALUE6, BGCOLOR_VALUE);
+	XTft_Write(&TftInstance, VarChar);
+	return XST_SUCCESS;
+}
+
+

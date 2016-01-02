@@ -1,0 +1,39 @@
+20:30:26 **** Auto Build of configuration Debug for project drawpicture ****
+make all 
+Building file: ../src/drawpic.c
+Invoking: MicroBlaze gcc compiler
+mb-gcc -Wall -O0 -g3 -c -fmessage-length=0 -I../../standalone_bsp_0/microblaze_0/include -mlittle-endian -mxl-barrel-shift -mxl-pattern-compare -mcpu=v8.40.b -mno-xl-soft-mul -Wl,--no-relax -ffunction-sections -fdata-sections -MMD -MP -MF"src/drawpic.d" -MT"src/drawpic.d" -o "src/drawpic.o" "../src/drawpic.c"
+../src/drawpic.c: In function 'main':
+../src/drawpic.c:17:7: warning: assignment from incompatible pointer type [enabled by default]
+../src/drawpic.c:14:11: warning: variable 'color' set but not used [-Wunused-but-set-variable]
+Finished building: ../src/drawpic.c
+ 
+Building target: drawpicture.elf
+Invoking: MicroBlaze gcc linker
+mb-gcc -Wl,-T -Wl,../src/lscript.ld -L../../standalone_bsp_0/microblaze_0/lib -mlittle-endian -mxl-barrel-shift -mxl-pattern-compare -mcpu=v8.40.b -mno-xl-soft-mul -Wl,--no-relax -Wl,--gc-sections -o "drawpicture.elf"  ./src/drawpic.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+Finished building target: drawpicture.elf
+ 
+Invoking: MicroBlaze Print Size
+mb-size drawpicture.elf  |tee "drawpicture.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+   5422	   3940	   2148	  11510	   2cf6	drawpicture.elf
+Finished building: drawpicture.elf.size
+ 
+Invoking: Xilinx ELF Check
+elfcheck drawpicture.elf -hw ../../axi-plb-fft-ps2_hw_platform/system.xml -pe microblaze_0  |tee "drawpicture.elf.elfcheck"
+elfcheck
+Xilinx EDK 14.7 Build EDK_P.20131013
+Copyright (c) 1995-2012 Xilinx, Inc.  All rights reserved.
+
+Command Line: elfcheck -hw ../../axi-plb-fft-ps2_hw_platform/system.xml -pe
+microblaze_0 drawpicture.elf 
+
+ELF file	: drawpicture.elf
+ERROR:EDK:756 - Cannot read XML file
+   ../../axi-plb-fft-ps2_hw_platform/system.xml
+Error: Creating Hardware Debug Object from ../../axi-plb-fft-ps2_hw_platform/system.xml
+Finished building: drawpicture.elf.elfcheck
+ 
+
+20:30:28 Build Finished (took 2s.425ms)
+

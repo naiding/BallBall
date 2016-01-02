@@ -1,0 +1,28 @@
+20:30:24 **** Auto Build of configuration Debug for project drawchar ****
+make all 
+Building target: drawchar.elf
+Invoking: MicroBlaze gcc linker
+mb-gcc -Wl,-T -Wl,../src/lscript.ld -L../../standalone_bsp_0/microblaze_0/lib -mlittle-endian -mxl-barrel-shift -mxl-pattern-compare -mcpu=v8.40.b -mno-xl-soft-mul -Wl,--no-relax -Wl,--gc-sections -o "drawchar.elf"  ./src/xtft_example.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+./src/xtft_example.o: In function `main':
+E:\application_program2\xilinx_works\microcomputer_MIPS_Nexys4\piano\piano\SDK\SDK_Export\drawchar\Debug/../src/xtft_example.c:93: undefined reference to `XTft_LookupConfig'
+E:\application_program2\xilinx_works\microcomputer_MIPS_Nexys4\piano\piano\SDK\SDK_Export\drawchar\Debug/../src/xtft_example.c:94: undefined reference to `XTft_CfgInitialize'
+E:\application_program2\xilinx_works\microcomputer_MIPS_Nexys4\piano\piano\SDK\SDK_Export\drawchar\Debug/../src/xtft_example.c:96: undefined reference to `XTft_SetFrameBaseAddr'
+E:\application_program2\xilinx_works\microcomputer_MIPS_Nexys4\piano\piano\SDK\SDK_Export\drawchar\Debug/../src/xtft_example.c:97: undefined reference to `XTft_ClearScreen'
+E:\application_program2\xilinx_works\microcomputer_MIPS_Nexys4\piano\piano\SDK\SDK_Export\drawchar\Debug/../src/xtft_example.c:98: undefined reference to `XTft_SetPos'
+E:\application_program2\xilinx_works\microcomputer_MIPS_Nexys4\piano\piano\SDK\SDK_Export\drawchar\Debug/../src/xtft_example.c:100: undefined reference to `XTft_SetColor'
+E:\application_program2\xilinx_works\microcomputer_MIPS_Nexys4\piano\piano\SDK\SDK_Export\drawchar\Debug/../src/xtft_example.c:101: undefined reference to `XTft_Write'
+E:\application_program2\xilinx_works\microcomputer_MIPS_Nexys4\piano\piano\SDK\SDK_Export\drawchar\Debug/../src/xtft_example.c:102: undefined reference to `XTft_SetColor'
+E:\application_program2\xilinx_works\microcomputer_MIPS_Nexys4\piano\piano\SDK\SDK_Export\drawchar\Debug/../src/xtft_example.c:103: undefined reference to `XTft_Write'
+E:\application_program2\xilinx_works\microcomputer_MIPS_Nexys4\piano\piano\SDK\SDK_Export\drawchar\Debug/../src/xtft_example.c:104: undefined reference to `XTft_SetColor'
+E:\application_program2\xilinx_works\microcomputer_MIPS_Nexys4\piano\piano\SDK\SDK_Export\drawchar\Debug/../src/xtft_example.c:105: undefined reference to `XTft_Write'
+E:\application_program2\xilinx_works\microcomputer_MIPS_Nexys4\piano\piano\SDK\SDK_Export\drawchar\Debug/../src/xtft_example.c:106: undefined reference to `XTft_SetColor'
+E:\application_program2\xilinx_works\microcomputer_MIPS_Nexys4\piano\piano\SDK\SDK_Export\drawchar\Debug/../src/xtft_example.c:107: undefined reference to `XTft_Write'
+E:\application_program2\xilinx_works\microcomputer_MIPS_Nexys4\piano\piano\SDK\SDK_Export\drawchar\Debug/../src/xtft_example.c:108: undefined reference to `XTft_SetColor'
+E:\application_program2\xilinx_works\microcomputer_MIPS_Nexys4\piano\piano\SDK\SDK_Export\drawchar\Debug/../src/xtft_example.c:109: undefined reference to `XTft_Write'
+E:\application_program2\xilinx_works\microcomputer_MIPS_Nexys4\piano\piano\SDK\SDK_Export\drawchar\Debug/../src/xtft_example.c:110: undefined reference to `XTft_SetColor'
+E:\application_program2\xilinx_works\microcomputer_MIPS_Nexys4\piano\piano\SDK\SDK_Export\drawchar\Debug/../src/xtft_example.c:111: undefined reference to `XTft_Write'
+collect2: ld returned 1 exit status
+make: *** [drawchar.elf] ´íÎó 1
+
+20:30:25 Build Finished (took 565ms)
+

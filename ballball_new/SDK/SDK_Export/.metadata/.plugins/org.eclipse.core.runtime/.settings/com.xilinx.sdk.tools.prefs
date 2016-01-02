@@ -1,0 +1,14 @@
+#Mon Nov 10 17:20:16 CST 2014
+com.xilinx.sdk.linkgen.prefs.drawchar\:Heap-size=1024
+com.xilinx.sdk.linkgen.prefs.drawchar\:.sdata2=microblaze_0_i_bram_cntlr_microblaze_0_d_bram_cntlr
+com.xilinx.sdk.linkgen.prefs.drawchar\:.sbss=microblaze_0_i_bram_cntlr_microblaze_0_d_bram_cntlr
+com.xilinx.sdk.linkgen.prefs.drawchar\:.data=microblaze_0_i_bram_cntlr_microblaze_0_d_bram_cntlr
+com.xilinx.sdk.linkgen.prefs.drawchar\:.rodata=microblaze_0_i_bram_cntlr_microblaze_0_d_bram_cntlr
+com.xilinx.sdk.linkgen.prefs.drawchar\:Stack=microblaze_0_i_bram_cntlr_microblaze_0_d_bram_cntlr
+com.xilinx.sdk.linkgen.prefs.drawchar\:Stack-size=1024
+com.xilinx.sdk.linkgen.prefs.drawchar\:.bss=microblaze_0_i_bram_cntlr_microblaze_0_d_bram_cntlr
+com.xilinx.sdk.linkgen.prefs.drawchar\:.sbss2=microblaze_0_i_bram_cntlr_microblaze_0_d_bram_cntlr
+eclipse.preferences.version=1
+com.xilinx.sdk.linkgen.prefs.drawchar\:.sdata=microblaze_0_i_bram_cntlr_microblaze_0_d_bram_cntlr
+com.xilinx.sdk.linkgen.prefs.drawchar\:Heap=microblaze_0_i_bram_cntlr_microblaze_0_d_bram_cntlr
+com.xilinx.sdk.linkgen.prefs.drawchar\:.text=microblaze_0_i_bram_cntlr_microblaze_0_d_bram_cntlr

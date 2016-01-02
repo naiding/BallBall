@@ -1,0 +1,46 @@
+02:34:54 **** Auto Build of configuration Debug for project snake ****
+make all 
+'Building file: ../src/main.c'
+'Invoking: MicroBlaze gcc compiler'
+mb-gcc -Wall -O0 -g3 -c -fmessage-length=0 -I../../Linedraw_bsp/microblaze_0/include -mlittle-endian -mxl-barrel-shift -mxl-pattern-compare -mcpu=v8.50.c -mno-xl-soft-mul -Wl,--no-relax -ffunction-sections -fdata-sections -MMD -MP -MF"src/main.d" -MT"src/main.d" -o "src/main.o" "../src/main.c"
+../src/main.c: In function 'writeVGA':
+../src/main.c:157:2: warning: 'return' with a value, in function returning void [enabled by default]
+../src/main.c: In function 'main':
+../src/main.c:283:6: warning: unused variable 'StatusReg' [-Wunused-variable]
+../src/main.c: In function 'clearMenu':
+../src/main.c:970:7: warning: unused variable 'choose_3' [-Wunused-variable]
+../src/main.c:969:7: warning: unused variable 'choose_2' [-Wunused-variable]
+../src/main.c:968:7: warning: unused variable 'choose_1' [-Wunused-variable]
+../src/main.c: In function 'displayGameBegin':
+../src/main.c:1020:28: warning: multi-character character constant [-Wmultichar]
+../src/main.c:1020:3: warning: large integer implicitly truncated to unsigned type [-Woverflow]
+'Finished building: ../src/main.c'
+' '
+'Building target: snake.elf'
+'Invoking: MicroBlaze gcc linker'
+mb-gcc -Wl,-T -Wl,../src/lscript.ld -L../../Linedraw_bsp/microblaze_0/lib -mlittle-endian -mxl-barrel-shift -mxl-pattern-compare -mcpu=v8.50.c -mno-xl-soft-mul -Wl,--no-relax -Wl,--gc-sections -o "snake.elf"  ./src/ball.o ./src/boom.o ./src/main.o ./src/snake.o   -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+'Finished building target: snake.elf'
+' '
+'Invoking: MicroBlaze Print Size'
+mb-size snake.elf  |tee "snake.elf.size"
+   text	   data	    bss	    dec	    hex	filename
+  43354	   2580	   2338	  48272	   bc90	snake.elf
+'Finished building: snake.elf.size'
+' '
+'Invoking: Xilinx ELF Check'
+elfcheck snake.elf -hw ../../piano_hw_platform/system.xml -pe microblaze_0  |tee "snake.elf.elfcheck"
+elfcheck
+Xilinx EDK 14.7 Build EDK_P.20131013
+Copyright (c) 1995-2012 Xilinx, Inc.  All rights reserved.
+
+Command Line: elfcheck -hw ../../piano_hw_platform/system.xml -pe microblaze_0
+snake.elf 
+
+ELF file	: snake.elf
+ERROR:EDK:756 - Cannot read XML file ../../piano_hw_platform/system.xml
+Error: Creating Hardware Debug Object from ../../piano_hw_platform/system.xml
+'Finished building: snake.elf.elfcheck'
+' '
+
+02:34:56 Build Finished (took 2s.212ms)
+

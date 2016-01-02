@@ -1,0 +1,279 @@
+
+ PARAMETER VERSION = 2.1.0
+
+
+ PORT CPU_RESET_I = net_CPU_RESET_I, DIR = I, SIGIS = RST, RST_POLARITY = 0
+ PORT CLK_I = net_CLK_I, DIR = I, SIGIS = CLK
+ PORT axi_uartlite_0_RX_pin = axi_uartlite_0_RX, DIR = I
+ PORT axi_uartlite_0_TX_pin = axi_uartlite_0_TX, DIR = O
+ PORT xps_tft_0_TFT_HSYNC_pin = xps_tft_0_TFT_HSYNC, DIR = O
+ PORT xps_tft_0_TFT_VSYNC_pin = xps_tft_0_TFT_VSYNC, DIR = O
+ PORT xps_tft_0_TFT_VGA_R_pin = xps_tft_0_TFT_VGA_R&0b00, DIR = O, VEC = [3:0]
+ PORT xps_tft_0_TFT_VGA_G_pin = xps_tft_0_TFT_VGA_G, DIR = O, VEC = [3:0]
+ PORT xps_tft_0_TFT_VGA_B_pin = xps_tft_0_TFT_VGA_B, DIR = O, VEC = [3:0]
+ PORT d_shared_mem_bus_0_PSRAM_Mem_CLK_O_pin = d_shared_mem_bus_0_PSRAM_Mem_CLK_O, DIR = O, SIGIS = CLK, CLK_FREQ = 90000000
+ PORT d_shared_mem_bus_0_PSRAM_Mem_CEN_O_pin = d_shared_mem_bus_0_PSRAM_Mem_CEN_O, DIR = O
+ PORT d_shared_mem_bus_0_PSRAM_Mem_CRE_O_pin = net_gnd, DIR = O
+ PORT d_shared_mem_bus_0_Mem_OEN_O_pin = d_shared_mem_bus_0_Mem_OEN_O, DIR = O
+ PORT d_shared_mem_bus_0_Mem_WEN_O_pin = d_shared_mem_bus_0_Mem_WEN_O, DIR = O
+ PORT d_shared_mem_bus_0_Mem_DQ_pin = d_shared_mem_bus_0_Mem_DQ, DIR = IO, VEC = [0:15]
+ PORT d_shared_mem_bus_0_PSRAM_Mem_UB_O_pin = d_shared_mem_bus_0_PSRAM_Mem_UB_O, DIR = O
+ PORT d_shared_mem_bus_0_PSRAM_Mem_LB_O_pin = d_shared_mem_bus_0_PSRAM_Mem_LB_O, DIR = O
+ PORT d_shared_mem_bus_0_Mem_Addr_O_pin = xps_mch_emc_0_Mem_A, DIR = O, VEC = [22:0]
+ PORT xps_ps2_0_PS2_1_DATA = xps_ps2_0_PS2_1_DATA, DIR = IO
+ PORT xps_ps2_0_PS2_1_CLK = xps_ps2_0_PS2_1_CLK, DIR = IO
+ PORT pwm_out = audio_ip_0_pwm_out, DIR = O
+ PORT pwm_sd = audio_ip_0_pwm_sd, DIR = O
+ PORT Dip_GPIO_IO_I_pin = Dip_GPIO_IO_I, DIR = I, VEC = [3:0]
+
+
+BEGIN xps_tft
+ PARAMETER INSTANCE = xps_tft_0
+ PARAMETER HW_VER = 2.01.a
+ PARAMETER C_TFT_INTERFACE = 0
+ PARAMETER C_DCR_SPLB_SLAVE_IF = 1
+ PARAMETER C_DEFAULT_TFT_BASE_ADDR = 0x87000000
+ PARAMETER C_SPLB_BASEADDR = 0x86e00000
+ PARAMETER C_SPLB_HIGHADDR = 0x86e0ffff
+ BUS_INTERFACE MPLB = plb_v46_0
+ BUS_INTERFACE SPLB = plb_v46_0
+ PORT SYS_TFT_Clk = clock_generator_0_CLKOUT2
+ PORT TFT_HSYNC = xps_tft_0_TFT_HSYNC
+ PORT TFT_VSYNC = xps_tft_0_TFT_VSYNC
+ PORT TFT_VGA_R = xps_tft_0_TFT_VGA_R&0b00
+ PORT TFT_VGA_G = xps_tft_0_TFT_VGA_G&0b00
+ PORT TFT_VGA_B = xps_tft_0_TFT_VGA_B&0b00
+END
+
+BEGIN xps_ps2
+ PARAMETER INSTANCE = xps_ps2_0
+ PARAMETER HW_VER = 1.01.b
+ PARAMETER C_BASEADDR = 0x86a00000
+ PARAMETER C_HIGHADDR = 0x86a0ffff
+ BUS_INTERFACE SPLB = plb_v46_0
+ PORT PS2_1_DATA = xps_ps2_0_PS2_1_DATA
+ PORT PS2_1_CLK = xps_ps2_0_PS2_1_CLK
+ PORT IP2INTC_Irpt_1 = xps_ps2_0_IP2INTC_Irpt_1
+END
+
+BEGIN xps_mch_emc
+ PARAMETER INSTANCE = xps_mch_emc_0
+ PARAMETER HW_VER = 3.01.a
+ PARAMETER C_NUM_BANKS_MEM = 1
+ PARAMETER C_NUM_CHANNELS = 0
+ PARAMETER C_MAX_MEM_WIDTH = 16
+ PARAMETER C_MEM0_WIDTH = 16
+ PARAMETER C_INCLUDE_DATAWIDTH_MATCHING_0 = 1
+ PARAMETER C_SYNCH_MEM_0 = 0
+ PARAMETER C_TCEDV_PS_MEM_0 = 70000
+ PARAMETER C_TAVDV_PS_MEM_0 = 70000
+ PARAMETER C_THZCE_PS_MEM_0 = 8000
+ PARAMETER C_THZOE_PS_MEM_0 = 8000
+ PARAMETER C_TWC_PS_MEM_0 = 70000
+ PARAMETER C_TWP_PS_MEM_0 = 45000
+ PARAMETER C_TLZWE_PS_MEM_0 = 10000
+ PARAMETER C_MEM0_BASEADDR = 0x87000000
+ PARAMETER C_MEM0_HIGHADDR = 0x87ffffff
+ BUS_INTERFACE SPLB = plb_v46_0
+ PORT RdClk = clock_generator_0_CLKOUT0
+ PORT Mem_CEN = d_shared_mem_bus_0_PSRAM_Mem_CEN_O
+ PORT Mem_OEN = d_shared_mem_bus_0_Mem_OEN_O
+ PORT Mem_WEN = d_shared_mem_bus_0_Mem_WEN_O
+ PORT Mem_BEN = d_shared_mem_bus_0_PSRAM_Mem_UB_O & d_shared_mem_bus_0_PSRAM_Mem_LB_O
+ PORT Mem_DQ = d_shared_mem_bus_0_Mem_DQ
+ PORT Mem_A = 0b00000000 & xps_mch_emc_0_Mem_A & 0b0
+END
+
+BEGIN proc_sys_reset
+ PARAMETER INSTANCE = reset_0
+ PARAMETER HW_VER = 3.00.a
+ PARAMETER C_EXT_RESET_HIGH = 0
+ PORT Dcm_locked = clock_generator_0_LOCKED_0
+ PORT INTERCONNECT_ARESETN = microblaze_0_axi_mem_INTERCONNECT_ARESETN
+ PORT BUS_STRUCT_RESET = microblaze_0_dlmb_SYS_RST
+ PORT MB_Reset = microblaze_0_MB_Reset
+ PORT Ext_Reset_In = net_CPU_RESET_I
+ PORT MB_Debug_Sys_Rst = microblaze_0_debug_module_Debug_SYS_Rst
+ PORT Slowest_sync_clk = clock_generator_0_CLKOUT0
+ PORT Peripheral_Reset = reset_0_Peripheral_Reset
+ PORT Peripheral_aresetn = reset_0_Peripheral_aresetn
+END
+
+BEGIN plb_v46
+ PARAMETER INSTANCE = plb_v46_0
+ PARAMETER HW_VER = 1.05.a
+ PARAMETER C_EXT_RESET_HIGH = 1
+ PORT SYS_Rst = reset_0_Peripheral_Reset
+ PORT PLB_Clk = clock_generator_0_CLKOUT0
+END
+
+BEGIN lmb_v10
+ PARAMETER INSTANCE = microblaze_0_ilmb
+ PARAMETER HW_VER = 2.00.b
+ PORT SYS_RST = microblaze_0_dlmb_SYS_RST
+ PORT LMB_Clk = clock_generator_0_CLKOUT0
+END
+
+BEGIN lmb_bram_if_cntlr
+ PARAMETER INSTANCE = microblaze_0_i_bram_cntlr
+ PARAMETER HW_VER = 3.10.c
+ PARAMETER C_BASEADDR = 0x00000000
+ PARAMETER C_HIGHADDR = 0x0003ffff
+ BUS_INTERFACE SLMB = microblaze_0_ilmb
+ BUS_INTERFACE BRAM_PORT = microblaze_0_i_bram_cntlr_BRAM_PORT
+END
+
+BEGIN lmb_v10
+ PARAMETER INSTANCE = microblaze_0_dlmb
+ PARAMETER HW_VER = 2.00.b
+ PORT SYS_RST = microblaze_0_dlmb_SYS_RST
+ PORT LMB_Clk = clock_generator_0_CLKOUT0
+END
+
+BEGIN mdm
+ PARAMETER INSTANCE = microblaze_0_debug_module
+ PARAMETER HW_VER = 2.10.a
+ PARAMETER C_INTERCONNECT = 2
+ PARAMETER C_BASEADDR = 0x44400000
+ PARAMETER C_HIGHADDR = 0x4440ffff
+ BUS_INTERFACE S_AXI = microblaze_0_axi_periph
+ BUS_INTERFACE MBDEBUG_0 = microblaze_0_debug_module_MBDEBUG_0
+ PORT S_AXI_ACLK = clock_generator_0_CLKOUT0
+ PORT Debug_SYS_Rst = microblaze_0_debug_module_Debug_SYS_Rst
+END
+
+BEGIN lmb_bram_if_cntlr
+ PARAMETER INSTANCE = microblaze_0_d_bram_cntlr
+ PARAMETER HW_VER = 3.10.c
+ PARAMETER C_BASEADDR = 0x00000000
+ PARAMETER C_HIGHADDR = 0x0003ffff
+ BUS_INTERFACE SLMB = microblaze_0_dlmb
+ BUS_INTERFACE BRAM_PORT = microblaze_0_d_bram_cntlr_BRAM_PORT
+END
+
+BEGIN bram_block
+ PARAMETER INSTANCE = microblaze_0_bram_block
+ PARAMETER HW_VER = 1.00.a
+ BUS_INTERFACE PORTB = microblaze_0_d_bram_cntlr_BRAM_PORT
+ BUS_INTERFACE PORTA = microblaze_0_i_bram_cntlr_BRAM_PORT
+END
+
+BEGIN axi_interconnect
+ PARAMETER INSTANCE = microblaze_0_axi_periph
+ PARAMETER HW_VER = 1.06.a
+ PARAMETER C_INTERCONNECT_CONNECTIVITY_MODE = 0
+ PORT INTERCONNECT_ARESETN = microblaze_0_axi_mem_INTERCONNECT_ARESETN
+ PORT INTERCONNECT_ACLK = clock_generator_0_CLKOUT0
+END
+
+BEGIN microblaze
+ PARAMETER INSTANCE = microblaze_0
+ PARAMETER HW_VER = 8.50.c
+ PARAMETER C_INTERCONNECT = 2
+ PARAMETER C_STREAM_INTERCONNECT = 1
+ PARAMETER C_DEBUG_ENABLED = 1
+ PARAMETER C_NUMBER_OF_PC_BRK = 2
+ PARAMETER C_ICACHE_LINE_LEN = 8
+ PARAMETER C_USE_BARREL = 1
+ PARAMETER C_USE_ICACHE = 0
+ PARAMETER C_USE_DCACHE = 0
+ PARAMETER C_ICACHE_BASEADDR = 0x43000000
+ PARAMETER C_ICACHE_HIGHADDR = 0x43ffffff
+ PARAMETER C_DCACHE_BASEADDR = 0x43000000
+ PARAMETER C_DCACHE_HIGHADDR = 0x43ffffff
+ PARAMETER C_ICACHE_ALWAYS_USED = 1
+ PARAMETER C_DCACHE_ALWAYS_USED = 1
+ BUS_INTERFACE DEBUG = microblaze_0_debug_module_MBDEBUG_0
+ BUS_INTERFACE INTERRUPT = axi_intc_0_INTERRUPT
+ BUS_INTERFACE DLMB = microblaze_0_dlmb
+ BUS_INTERFACE ILMB = microblaze_0_ilmb
+ BUS_INTERFACE M_AXI_DP = microblaze_0_axi_periph
+ BUS_INTERFACE M_AXI_IP = microblaze_0_axi_periph
+ PORT MB_Reset = microblaze_0_MB_Reset
+END
+
+BEGIN clock_generator
+ PARAMETER INSTANCE = clock_generator_0
+ PARAMETER HW_VER = 4.03.a
+ PARAMETER C_CLKIN_FREQ = 100000000
+ PARAMETER C_CLKOUT0_FREQ = 90000000
+ PARAMETER C_CLKOUT1_FREQ = 90000000
+ PARAMETER C_CLKOUT2_FREQ = 25000000
+ PORT LOCKED = clock_generator_0_LOCKED_0
+ PORT CLKIN = net_CLK_I
+ PORT CLKOUT0 = clock_generator_0_CLKOUT0
+ PORT CLKOUT1 = d_shared_mem_bus_0_PSRAM_Mem_CLK_O
+ PORT CLKOUT2 = clock_generator_0_CLKOUT2
+END
+
+BEGIN axi_uartlite
+ PARAMETER INSTANCE = axi_uartlite_0
+ PARAMETER HW_VER = 1.02.a
+ PARAMETER C_BAUDRATE = 115200
+ PARAMETER C_USE_PARITY = 0
+ PARAMETER C_BASEADDR = 0x40600000
+ PARAMETER C_HIGHADDR = 0x4060ffff
+ BUS_INTERFACE S_AXI = microblaze_0_axi_periph
+ PORT RX = axi_uartlite_0_RX
+ PORT TX = axi_uartlite_0_TX
+ PORT S_AXI_ACLK = clock_generator_0_CLKOUT0
+ PORT Interrupt = axi_uartlite_0_Interrupt
+END
+
+BEGIN axi_timer
+ PARAMETER INSTANCE = axi_timer_0
+ PARAMETER HW_VER = 1.03.a
+ PARAMETER C_BASEADDR = 0x41c00000
+ PARAMETER C_HIGHADDR = 0x41c0ffff
+ BUS_INTERFACE S_AXI = microblaze_0_axi_periph
+ PORT S_AXI_ACLK = clock_generator_0_CLKOUT0
+ PORT Interrupt = axi_timer_0_Interrupt
+END
+
+BEGIN axi_plbv46_bridge
+ PARAMETER INSTANCE = axi_plbv46_bridge_0
+ PARAMETER HW_VER = 2.02.a
+ PARAMETER C_S_AXI_NUM_ADDR_RANGES = 3
+ PARAMETER C_S_AXI_RNG1_BASEADDR = 0x86a00000
+ PARAMETER C_S_AXI_RNG1_HIGHADDR = 0x86a0ffff
+ PARAMETER C_S_AXI_RNG2_BASEADDR = 0x86e00000
+ PARAMETER C_S_AXI_RNG2_HIGHADDR = 0x86e0ffff
+ PARAMETER C_S_AXI_RNG3_BASEADDR = 0x87000000
+ PARAMETER C_S_AXI_RNG3_HIGHADDR = 0x87ffffff
+ BUS_INTERFACE S_AXI = microblaze_0_axi_periph
+ BUS_INTERFACE MPLB = plb_v46_0
+END
+
+BEGIN axi_intc
+ PARAMETER INSTANCE = axi_intc_0
+ PARAMETER HW_VER = 1.04.a
+ PARAMETER C_BASEADDR = 0x41200000
+ PARAMETER C_HIGHADDR = 0x4120ffff
+ BUS_INTERFACE S_AXI = microblaze_0_axi_periph
+ BUS_INTERFACE INTERRUPT = axi_intc_0_INTERRUPT
+ PORT Intr = axi_timer_0_Interrupt & xps_ps2_0_IP2INTC_Irpt_1
+ PORT S_AXI_ACLK = clock_generator_0_CLKOUT0
+END
+
+BEGIN audio_ip
+ PARAMETER INSTANCE = audio_ip_0
+ PARAMETER HW_VER = 1.00.a
+ PARAMETER C_BASEADDR = 0x7e200000
+ PARAMETER C_HIGHADDR = 0x7e20ffff
+ BUS_INTERFACE S_AXI = microblaze_0_axi_periph
+ PORT S_AXI_ACLK = clock_generator_0_CLKOUT0
+ PORT pwm_out = audio_ip_0_pwm_out
+ PORT pwm_sd = audio_ip_0_pwm_sd
+END
+
+BEGIN axi_gpio
+ PARAMETER INSTANCE = Dip
+ PARAMETER HW_VER = 1.01.b
+ PARAMETER C_GPIO_WIDTH = 4
+ PARAMETER C_BASEADDR = 0x40000000
+ PARAMETER C_HIGHADDR = 0x4000ffff
+ BUS_INTERFACE S_AXI = microblaze_0_axi_periph
+ PORT S_AXI_ACLK = clock_generator_0_CLKOUT0
+ PORT GPIO_IO_I = Dip_GPIO_IO_I
+END
+

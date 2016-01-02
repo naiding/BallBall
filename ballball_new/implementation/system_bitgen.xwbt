@@ -1,0 +1,7 @@
+INFILE=E:\application_program2\xilinx_works\microcomputer_MIPS_Nexys4\piano\piano\implementation\system.ncd
+OUTFILE=E:\application_program2\xilinx_works\microcomputer_MIPS_Nexys4\piano\piano\implementation\system.bit
+FAMILY=Artix7
+PART=xc7a100t-1csg324
+WORKINGDIR=E:\application_program2\xilinx_works\microcomputer_MIPS_Nexys4\piano\piano\implementation
+LICENSE=WebPack
+USER_INFO=__0_0_0

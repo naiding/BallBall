@@ -1,0 +1,77 @@
+16:38:38 **** Build of project standalone_bsp_0 ****
+make -k all 
+libgen -hw ../N4_TFT_Ok_hw_platform/system.xml\
+	       \
+	       -pe microblaze_0 \
+	       -log libgen.log \
+	       system.mss
+libgen
+Xilinx EDK 14.7 Build EDK_P.20131013
+Copyright (c) 1995-2012 Xilinx, Inc.  All rights reserved.
+
+Command Line: libgen -hw ../N4_TFT_Ok_hw_platform/system.xml -pe microblaze_0
+-log libgen.log system.mss 
+
+WARNING:EDK:411 - intc -
+   G:\GreedSnake_VGA\piano\SDK\SDK_Export\standalone_bsp_0\system.mss line 21 -
+   deprecated driver!
+WARNING:EDK:411 - tmrctr -
+   G:\GreedSnake_VGA\piano\SDK\SDK_Export\standalone_bsp_0\system.mss line 27 -
+   deprecated driver!
+WARNING:EDK:411 - uartlite -
+   G:\GreedSnake_VGA\piano\SDK\SDK_Export\standalone_bsp_0\system.mss line 33 -
+   deprecated driver!
+WARNING:EDK:411 - bram -
+   G:\GreedSnake_VGA\piano\SDK\SDK_Export\standalone_bsp_0\system.mss line 39 -
+   deprecated driver!
+WARNING:EDK:411 - uartlite -
+   G:\GreedSnake_VGA\piano\SDK\SDK_Export\standalone_bsp_0\system.mss line 45 -
+   deprecated driver!
+WARNING:EDK:411 - bram -
+   G:\GreedSnake_VGA\piano\SDK\SDK_Export\standalone_bsp_0\system.mss line 51 -
+   deprecated driver!
+WARNING:EDK:411 - tft -
+   G:\GreedSnake_VGA\piano\SDK\SDK_Export\standalone_bsp_0\system.mss line 63 -
+   deprecated driver!
+WARNING:EDK:411 - cpu -
+   G:\GreedSnake_VGA\piano\SDK\SDK_Export\standalone_bsp_0\system.mss line 14 -
+   deprecated processor!
+WARNING:EDK:411 - standalone -
+   G:\GreedSnake_VGA\piano\SDK\SDK_Export\standalone_bsp_0\system.mss line 5 -
+   deprecated os!
+
+Staging source files.
+Running DRCs.
+Running generate.
+Running post_generate.
+Running include - 'make -s include "COMPILER=mb-gcc" "ARCHIVER=mb-ar"
+"COMPILER_FLAGS=-mlittle-endian -mno-xl-soft-mul -mxl-barrel-shift
+-mxl-pattern-compare -mcpu=v8.50.c  -O2 -c" "EXTRA_COMPILER_FLAGS=-g
+-ffunction-sections -fdata-sections"'.
+
+Running libs - 'make -s libs "COMPILER=mb-gcc" "ARCHIVER=mb-ar"
+"COMPILER_FLAGS=-mlittle-endian -mno-xl-soft-mul -mxl-barrel-shift
+-mxl-pattern-compare -mcpu=v8.50.c  -O2 -c" "EXTRA_COMPILER_FLAGS=-g
+-ffunction-sections -fdata-sections"'.
+"Compiling common"
+"Compiling standalone";
+"Compiling intc"
+"Compiling tmrctr"
+"Compiling uartlite"
+"Compiling bram"
+"Compiling tft"
+xtft.c: In function 'XTft_GetPixel':
+xtft.c:1082:0: error: unterminated argument list invoking macro "Xil_In32"
+xtft.c:367:14: error: 'Xil_In32' undeclared (first use in this function)
+xtft.c:367:14: note: each undeclared identifier is reported only once for each function it appears in
+xtft.c:367:2: error: expected ';' at end of input
+xtft.c:367:2: error: expected declaration or statement at end of input
+make[1]: *** [libs] 错误 1
+"Compiling cpu"
+ERROR:EDK:369 -  make failed for target "libs" 
+ERROR:EDK:3418 - Error(s) while running make.
+make: *** [microblaze_0/lib/libxil.a] 错误 2
+make: 由于错误目标“all”并未重新创建。
+
+16:39:55 Build Finished (took 1m:17s.377ms)
+

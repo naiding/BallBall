@@ -1,0 +1,26 @@
+/*
+ * snake.h
+ *
+ *  Created on: 2015-1-6
+ *      Author: xc
+ */
+
+#ifndef SNAKE_H_
+#define SNAKE_H_
+
+
+struct Node{
+	int x;
+	int y;
+	struct Node* Next;
+	struct Node* Pre;
+};
+typedef struct Node *Snake;
+typedef Snake List;
+
+void Insert(int x, int y,Snake P);
+void move(int direction, Snake L);
+
+
+
+#endif /* SNAKE_H_ */
